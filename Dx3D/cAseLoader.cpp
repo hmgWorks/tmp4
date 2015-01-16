@@ -18,11 +18,14 @@ cFrame* cAseLoader::Load( std::string& sFolder, std::string& sFileName )
 	m_sFolder = sFolder;
 
 	fopen_s(&m_fp, (sFolder + sFileName).c_str(), "r");
-
+	
 	while(char* szToken = GetToken())
 	{
-		if(IsEqual(szToken, ID_SCENE))
-			SkipBlock();
+		if (IsEqual(szToken, ID_SCENE))
+		{
+			ProcessScene(
+				nSceneFirstframe, nSceneLastframe, nSceneFramespeed, nSceneTicksperframe);
+		}
 		else if(IsEqual(szToken, ID_MATERIAL_LIST))
 		{
 			ProcessMaterialList();
@@ -30,6 +33,10 @@ cFrame* cAseLoader::Load( std::string& sFolder, std::string& sFileName )
 		else if(IsEqual(szToken, ID_GEOMETRY))
 		{
 			cFrame* pFrame = ProcessGeomObject();
+			pFrame->m_nSceneFirstframe = nSceneFirstframe;
+			pFrame->m_nSceneLastframe = nSceneLastframe;
+			pFrame->m_nSceneFramespeed = nSceneFramespeed;
+			pFrame->m_nSceneTicksperframe = nSceneTicksperframe;
 			m_mapFrame[pFrame->m_sNodeName] = pFrame;
 			if(m_pRootFrame)
 			{
@@ -127,6 +134,40 @@ void cAseLoader::SkipBlock()
 		else if(IsEqual(szToken, "}"))
 		{
 			--nLevel;
+		}
+	} while (nLevel > 0);
+}
+
+void cAseLoader::ProcessScene(
+	int& nFirstframe, int& nLastframe, int& nFramespeed, int& nTicksperframe)
+{
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{			
+			--nLevel;
+		}
+		else if (IsEqual(szToken, ID_FIRSTFRAME))
+		{
+			nFirstframe = GetInteger();
+		}
+		else if (IsEqual(szToken, ID_LASTFRAME))
+		{
+			nLastframe = GetInteger();
+		}
+		else if (IsEqual(szToken, ID_FRAMESPEED))
+		{
+			nFramespeed = GetInteger();
+		}
+		else if (IsEqual(szToken, ID_TICKSPERFRAME))
+		{
+			nTicksperframe = GetInteger();
 		}
 	} while (nLevel > 0);
 }
@@ -533,6 +574,10 @@ void cAseLoader::ProcessAnimation(cFrame*pFrame)
 		{
 			ProcessControlRotTrack(pFrame);
 		}
+		else if (IsEqual(szToken, ID_CONTROL_ROT_TCB))
+		{
+			ProcessControlRotTcb(pFrame);
+		}
 	} while (nLevel > 0);
 }
 
@@ -553,7 +598,7 @@ void cAseLoader::ProcessControlPosTrack(cFrame* pFrame)
 		else if (IsEqual(szToken, ID_POS_SAMPLE))
 		{
 			ST_POS_SAMPLE pos;
-			pos.nKey = GetInteger();
+			pos.nKey = GetInteger() / nSceneTicksperframe;
 			pos.v.x = GetFloat();
 			pos.v.z = GetFloat();
 			pos.v.y = GetFloat();
@@ -580,7 +625,7 @@ void cAseLoader::ProcessControlRotTrack(cFrame* pFrame)
 		else if (IsEqual(szToken, ID_ROT_SAMPLE))
 		{
 			ST_ROT_SAMPLE rot;
-			rot.nKey = GetInteger();
+			rot.nKey = GetInteger() / nSceneTicksperframe;
 			rot.q.x = GetFloat();
 			rot.q.z = GetFloat();
 			rot.q.y = GetFloat();
@@ -604,6 +649,53 @@ void cAseLoader::ProcessControlRotTrack(cFrame* pFrame)
 				rot.q = pFrame->m_vecRotTrack.back().q * rot.q;
 			}
 			pFrame->m_vecRotTrack.push_back(rot);
+		}
+	} while (nLevel > 0);
+}
+
+void cAseLoader::ProcessControlRotTcb(cFrame* pFrame)
+{
+	int nLevel = 0;
+	do
+	{
+		char* szToken = GetToken();
+		if (IsEqual(szToken, "{"))
+		{
+			++nLevel;
+		}
+		else if (IsEqual(szToken, "}"))
+		{
+			--nLevel;
+		}
+		else if (IsEqual(szToken, ID_TCB_ROT_KEY))
+		{
+			ST_ROT_SAMPLE rot;
+			rot.nKey = GetInteger() / nSceneTicksperframe;
+			rot.q.x = GetFloat();
+			rot.q.z = GetFloat();
+			rot.q.y = GetFloat();
+			rot.q.w = GetFloat();
+			
+			//skip
+			GetFloat();
+			GetFloat();
+			GetFloat();
+			GetFloat();
+			GetFloat();
+			//end skip
+
+			rot.q.x = rot.q.x * sin(rot.q.w / 2.0f);
+			rot.q.y = rot.q.y * sin(rot.q.w / 2.0f);
+			rot.q.z = rot.q.z * sin(rot.q.w / 2.0f);
+			rot.q.w = cos(rot.q.w / 2.0f);
+
+			//쿼터니언을 중첩해서 저장 한다.
+			if (!pFrame->m_vecRotTrack.empty())
+			{
+				rot.q = pFrame->m_vecRotTrack.back().q * rot.q;
+			}
+			pFrame->m_vecRotTrack.push_back(rot);
+
 		}
 	} while (nLevel > 0);
 }

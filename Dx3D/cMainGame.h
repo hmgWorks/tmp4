@@ -28,6 +28,7 @@ private:
 	std::vector<cMtlTex*>	m_vecMtlTex;
 	std::vector<cWayPoint*>	m_vecWayPoint;
 
+	int m_nOld, m_nCurt;
 public:
 	cMainGame(void);
 	~cMainGame(void);

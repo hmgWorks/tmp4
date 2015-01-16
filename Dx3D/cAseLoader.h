@@ -19,7 +19,7 @@ public:
 	~cAseLoader(void);
 
 	cFrame* Load(std::string& sFolder, std::string& sFileName);
-
+	int nSceneFirstframe, nSceneLastframe, nSceneFramespeed, nSceneTicksperframe;
 private:
 	char*	GetToken();
 	bool	IsWhite(char c);
@@ -28,6 +28,7 @@ private:
 	float	GetFloat();
 	void	SkipBlock();
 	
+	void ProcessScene(int& nFirstframe, int& nLastframe, int& nFramespeed, int& nTicksperframe);
 	void	ProcessMaterialList();
 	void	ProcessMaterial(cMtlTex* pMtlTex);
 	void	ProcessMapDiffuse(cMtlTex* pMtlTex);
@@ -42,6 +43,7 @@ private:
 	void ProcessAnimation(cFrame* pFrame);
 	void ProcessControlPosTrack(cFrame* pFrame);
 	void ProcessControlRotTrack(cFrame* pFrame);
+	void ProcessControlRotTcb(cFrame* pFrame);
 	
 };
 

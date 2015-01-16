@@ -90,6 +90,7 @@ void cFrame::SetMtlTex( cMtlTex* pMtlTex )
 
 void cFrame::Update( D3DXMATRIXA16* pmatParent, int nkey)
 {
+
 	D3DXMATRIXA16 matT, matR;
 
 	CalcPosTM(matT, nkey);

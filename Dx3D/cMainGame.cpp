@@ -66,6 +66,7 @@ cMainGame::~cMainGame(void)
 
 void cMainGame::Setup()
 {
+	m_nOld = GetTickCount();
 	// Axis-Angle x, y, z, w
 	//Axis-Angle -> Quaternion
 	//qx = x * sin(w/2)
@@ -188,16 +189,34 @@ void cMainGame::Setup()
 
 void cMainGame::Update()
 {
+	/*
+	this->GetAniFrameInf(&m_nFrmF, &m_nFrmL, &m_nFrmS, &m_nFrmT);
+	m_dBgn = timeGetTime();
+	*/
+	
 	g_pTimeManager->Update();
-
+		
 	m_pCubeMan->Update(m_pMap);
 	m_pCamera->Update();
+
+	
 	if (m_pAseRoot)
-	{	
-		int nkey = (GetTickCount()  % (3200 - 640)) + 640;		
-		
-		m_pAseRoot->Update(NULL, nkey);
+	{		
+		//int nkey = (GetTickCount()  % (3200 - 640)) + 640;		
+		static int cnt = m_pAseRoot->m_nSceneFirstframe;
+		m_nCurt = GetTickCount();
+		if (m_nCurt > m_nOld + m_pAseRoot->m_nSceneFramespeed)
+		{
+			cnt++;
+			m_nOld = m_nCurt;
+			if (cnt > m_pAseRoot->m_nSceneLastframe)
+			{
+				cnt = m_pAseRoot->m_nSceneFirstframe;
+			}
+		}
+		m_pAseRoot->Update(NULL, cnt);
 	}
+	
 
 	if(m_pTeapot)
 		m_pTeapot->Update();
