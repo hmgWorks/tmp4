@@ -115,7 +115,8 @@ void cMainGame::Setup()
 	sFolder += std::string("ase/woman/");
 
 	cAseLoader AseLoader;
-	m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all.ASE"));
+	m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all_stand.ASE"));
+	//m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all.ASE"));
 	//D3DXCreateSphere(g_pD3DDevice, 3, 100, 100, &m_pMesh, NULL);
 	//D3DXCreateBox(g_pD3DDevice, 3, 3, 3, &m_pMesh, NULL);
 	//D3DXCreateTeapot(g_pD3DDevice, &m_pMesh, NULL);
