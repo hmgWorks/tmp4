@@ -125,7 +125,10 @@ void cMainGame::Setup()
 	cObjLoader ObjLoader;
 	sFolder = std::string(RESOURCE_FOLDER);
 	sFolder += std::string("obj/");
-	
+	/*
+		tset
+	*/
+
 
 	D3DXMATRIXA16 matWorld;
 	D3DXMATRIXA16 matS, matR;
