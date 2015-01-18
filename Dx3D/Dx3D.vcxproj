@@ -96,6 +96,7 @@
     <ClInclude Include="cGrid.h" />
     <ClInclude Include="cGroup.h" />
     <ClInclude Include="cIndexCube.h" />
+    <ClInclude Include="cInputManiger.h" />
     <ClInclude Include="cMainGame.h" />
     <ClInclude Include="cMtlTex.h" />
     <ClInclude Include="cObject.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="cGrid.cpp" />
     <ClCompile Include="cGroup.cpp" />
     <ClCompile Include="cIndexCube.cpp" />
+    <ClCompile Include="cInputManiger.cpp" />
     <ClCompile Include="cMainGame.cpp" />
     <ClCompile Include="cMtlTex.cpp" />
     <ClCompile Include="cObject.cpp" />

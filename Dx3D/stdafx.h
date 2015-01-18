@@ -94,7 +94,7 @@ while (true)\
 #include "cObjectManager.h"
 #include "cDeviceManager.h"
 #include "cTextureManager.h"
-
+#include "cInputManiger.h"
 
 #define RESOURCE_FOLDER "../../Resources/"
 
