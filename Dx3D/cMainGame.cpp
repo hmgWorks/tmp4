@@ -334,3 +334,4 @@ void cMainGame::OnActionFinish( cAction* pSender )
 {
 	int a = 0;
 }
+
