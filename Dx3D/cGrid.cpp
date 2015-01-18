@@ -117,9 +117,9 @@ void cGrid::Setup( int nHalfTile, float fWidth )
 	for (int i = 1; i <= nHalfTile; ++i)
 	{
 		if(i % 5 == 0)
-			v.c = D3DCOLOR_XRGB(255, 255, 255);
+			v.c = D3DCOLOR_XRGB(73, 79, 105);
 		else
-			v.c = D3DCOLOR_XRGB(128, 128, 128);
+			v.c = D3DCOLOR_XRGB(50, 55, 72);
 
 		v.p = D3DXVECTOR3(fMin, 0, i * fWidth);
 		m_vecVertex.push_back(v);
