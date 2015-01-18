@@ -9,7 +9,8 @@ protected:
 	SYNTHESIZE(float, m_fActionTime, ActionTime);
 	SYNTHESIZE(cGameObject*, m_pOwner, Owner);
 	SYNTHESIZE(iActionDelegate*, m_pDelegate, Delegate);
-
+	HRESULT hr = S_OK;
+	
 public:
 	cAction();
 	virtual ~cAction();

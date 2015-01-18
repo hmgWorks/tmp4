@@ -60,6 +60,31 @@ public: virtual void Set##funName(varType var){\
 	}\
 }
 
+
+#define WINMAIN_LOOP(P)\
+	[&](){\
+while (true)\
+{\
+	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))\
+	{\
+		if (msg.message == WM_QUIT)\
+		{\
+			break;\
+		}\
+		else\
+		{\
+			TranslateMessage(&msg);\
+			DispatchMessage(&msg);\
+		}\
+	}\
+	else\
+	{\
+		P->Update();\
+		P->Render();\
+	}\
+}\
+}();\
+
 // 인터페이스들
 #include "iActionDelegate.h"
 

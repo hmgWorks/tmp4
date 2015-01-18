@@ -9,6 +9,7 @@ cFrame::cFrame(void)
 {
 	D3DXMatrixIdentity(&m_matLocalTM);
 	D3DXMatrixIdentity(&m_matWorldTM);
+	
 }
 
 
@@ -91,8 +92,8 @@ void cFrame::SetMtlTex( cMtlTex* pMtlTex )
 void cFrame::Update( D3DXMATRIXA16* pmatParent, int nkey)
 {
 
-	D3DXMATRIXA16 matT, matR;
-
+	D3DXMATRIXA16  matT, matR;
+	
 	CalcPosTM(matT, nkey);
 	CalcRotTM(matR, nkey);
 

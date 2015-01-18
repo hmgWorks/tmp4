@@ -17,7 +17,6 @@ private:
 	std::vector<ST_POS_SAMPLE> m_vecPosTrack;
 	std::vector<ST_ROT_SAMPLE> m_vecRotTrack;
 
-	
 public:
 	int m_nSceneFirstframe, m_nSceneLastframe, m_nSceneFramespeed, m_nSceneTicksperframe;
 	cFrame(void);

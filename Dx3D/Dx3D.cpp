@@ -48,26 +48,27 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DX3D));
 
 	// 기본 메시지 루프입니다.
-	while(true)
-	{
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			if(msg.message == WM_QUIT)
-			{
-				break;
-			}
-			else
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-		}
-		else
-		{
-			g_pMainGame->Update();
-			g_pMainGame->Render();
-		}
-	}
+	//while(true)
+	//{
+	//	if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	//	{
+	//		if(msg.message == WM_QUIT)
+	//		{
+	//			break;
+	//		}
+	//		else
+	//		{
+	//			TranslateMessage(&msg);
+	//			DispatchMessage(&msg);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		g_pMainGame->Update();
+	//		g_pMainGame->Render();
+	//	}
+	//}
+	WINMAIN_LOOP(g_pMainGame);
 
 	SAFE_RELEASE(g_pMainGame);
 

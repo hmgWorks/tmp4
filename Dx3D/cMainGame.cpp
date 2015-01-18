@@ -86,7 +86,7 @@ void cMainGame::Setup()
 	
 	m_pTeapot = new cTeapot;
 	m_pTeapot->Setup(D3DXCOLOR(0.8f, 0.2f, 0.4f, 1.0f));
-
+	
 	cActionSeq* pActionSeq = new cActionSeq;
 	for (int i = 0; i < 6; ++i)
 	{
@@ -115,8 +115,8 @@ void cMainGame::Setup()
 	sFolder += std::string("ase/woman/");
 
 	cAseLoader AseLoader;
-	m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all_stand.ASE"));
-	//m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all.ASE"));
+	//m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all_stand.ASE"));
+	m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all.ASE"));
 	//D3DXCreateSphere(g_pD3DDevice, 3, 100, 100, &m_pMesh, NULL);
 	//D3DXCreateBox(g_pD3DDevice, 3, 3, 3, &m_pMesh, NULL);
 	//D3DXCreateTeapot(g_pD3DDevice, &m_pMesh, NULL);
