@@ -3,9 +3,9 @@
 
 
 cInputManiger::cInputManiger()
-	:m_bKeyDownOnceCheck(FALSE)
 {
 	memset(m_bKeyCode, 0, sizeof(m_bKeyCode));
+	memset(m_bKeyCodeOnce, 0, sizeof(m_bKeyCodeOnce));
 }
 
 cInputManiger::~cInputManiger()
@@ -19,10 +19,12 @@ BOOL cInputManiger::GetKeyDown(WPARAM dw_key)
 
 BOOL cInputManiger::GetKeyDownOnce(WPARAM dw_key)
 {
-	if (m_bKeyCode[dw_key] && m_bKeyDownOnceCheck)
+	if (m_bKeyCode[dw_key])
 	{
-		m_bKeyDownOnceCheck = FALSE;
-		return TRUE;
+		if (!m_bKeyCodeOnce[dw_key])
+		{
+			return m_bKeyCodeOnce[dw_key] = TRUE;
+		}
 	}
 	return FALSE;
 }
@@ -30,16 +32,12 @@ BOOL cInputManiger::GetKeyDownOnce(WPARAM dw_key)
 void cInputManiger::KeyDown(WPARAM dw_key)
 {
 	m_bKeyCode[dw_key] = TRUE;
-	if (m_bKeyDownOnceCheck == FALSE)
-	{
-		m_bKeyDownOnceCheck = TRUE;
-	}
 }
 
 void cInputManiger::KeyUp(WPARAM dw_key)
 {
 	m_bKeyCode[dw_key] = FALSE;
-	m_bKeyDownOnceCheck = FALSE;
+	m_bKeyCodeOnce[dw_key] = FALSE;
 }
 
 void cInputManiger::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

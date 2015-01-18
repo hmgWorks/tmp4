@@ -28,6 +28,9 @@ cMainGame::cMainGame(void)
 	, m_pAseRoot(NULL)
 	, m_pTeapot(NULL)
 {
+	m_bUpKey = FALSE;	
+	m_bDownKey = FALSE;
+	m_nKeyValue = 0;
 }
 
 
@@ -194,7 +197,28 @@ void cMainGame::Update()
 	this->GetAniFrameInf(&m_nFrmF, &m_nFrmL, &m_nFrmS, &m_nFrmT);
 	m_dBgn = timeGetTime();
 	*/
+	/*static BOOL PrevUpKey = FALSE;
+	static BOOL PrevDownKey = FALSE;
 	
+	m_bUpKey = g_pInputManager->GetKeyDown(VK_UP);*/
+	//if (!PrevUpKey && m_bUpKey)
+	if (g_pInputManager->GetKeyDownOnce(VK_UP))
+	{
+		m_nKeyValue++;
+	}
+	if (g_pInputManager->GetKeyDownOnce(VK_DOWN))
+	{
+		m_nKeyValue--;
+	}
+	//PrevUpKey = m_bUpKey;
+
+	/*m_bDownKey = g_pInputManager->GetKeyDown(VK_DOWN);
+	if (!PrevDownKey && m_bDownKey)
+	{
+		m_nKeyValue--;
+	}
+	PrevDownKey = m_bDownKey;*/
+
 	g_pTimeManager->Update();
 		
 	m_pCubeMan->Update(m_pMap);
@@ -298,12 +322,13 @@ void cMainGame::Render()
 // 	}
 // 	
 // 
-// 	RECT rc;
-// 	SetRect(&rc, 100, 100, 101, 101);
-// 	char szTemp[1024];
+ 	RECT rc;
+ 	SetRect(&rc, 100, 100, 101, 101);
+ 	char szTemp[1024];
 // 	sprintf(szTemp, "%d / %d", dwGroup , dwMesh);
-// 	m_pFont->DrawTextA(NULL, szTemp, strlen(szTemp),
-// 		&rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255,0,0));
+	sprintf(szTemp, "%d", m_nKeyValue);
+ 	m_pFont->DrawTextA(NULL, szTemp, strlen(szTemp),
+ 		&rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255,0,0));
 
 
 	g_pD3DDevice->EndScene();

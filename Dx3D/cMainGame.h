@@ -28,6 +28,8 @@ private:
 	std::vector<cMtlTex*>	m_vecMtlTex;
 	std::vector<cWayPoint*>	m_vecWayPoint;
 
+	BOOL m_bUpKey, m_bDownKey;
+	int m_nKeyValue;
 	int m_nOld, m_nCurt;
 public:
 	cMainGame(void);
