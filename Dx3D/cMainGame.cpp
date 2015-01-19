@@ -16,6 +16,8 @@
 #include "cWayPoint.h"
 #include "cActionSeq.h"
 #include "cActionRepeat.h"
+//#include "cWoman.h"
+#include "cHeightMap.h"
 
 cMainGame::cMainGame(void)
 	: m_pGrid(NULL)
@@ -27,6 +29,8 @@ cMainGame::cMainGame(void)
 	, m_pMesh(NULL)
 	, m_pAseRoot(NULL)
 	, m_pTeapot(NULL)
+	//, m_pWoman(NULL)
+	, m_pHeightMap(NULL)
 {
 	m_bUpKey = FALSE;	
 	m_bDownKey = FALSE;
@@ -36,6 +40,8 @@ cMainGame::cMainGame(void)
 
 cMainGame::~cMainGame(void)
 {
+	SAFE_DELETE(m_pHeightMap);
+	//SAFE_DELETE(m_pWoman);
 	SAFE_DELETE(m_pGrid);
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pCubeMan);
@@ -150,6 +156,14 @@ void cMainGame::Setup()
 	m_pCubeMan = new cCubeMan;
 	m_pCubeMan->Setup();
 
+	/*m_pWoman = new cWoman;
+	m_pWoman->Setup();*/
+	m_pHeightMap = new cHeightMap;
+	std::string file = std::string(RESOURCE_FOLDER);
+	file += std::string("HeightMapData/HeightMap.raw");
+	m_pHeightMap->Load(file);
+
+
 	m_pCamera = new cCamera;
 	m_pCamera->Setup();
 	m_pCamera->SetTarget(&m_pCubeMan->GetPosition());
@@ -183,7 +197,7 @@ void cMainGame::Setup()
 	stLight.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 	stLight.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 	stLight.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-
+	
 	g_pD3DDevice->SetRenderState(D3DRS_NORMALIZENORMALS, true);
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 	g_pD3DDevice->SetLight(0, &stLight);
@@ -202,14 +216,15 @@ void cMainGame::Update()
 	
 	m_bUpKey = g_pInputManager->GetKeyDown(VK_UP);*/
 	//if (!PrevUpKey && m_bUpKey)
-	if (g_pInputManager->GetKeyDownOnce(VK_UP))
-	{
-		m_nKeyValue++;
-	}
-	if (g_pInputManager->GetKeyDownOnce(VK_DOWN))
-	{
-		m_nKeyValue--;
-	}
+	//if (g_pInputManager->GetKeyDownOnce(VK_UP))
+	//{
+	//	m_nKeyValue++;
+	//}
+	//if (g_pInputManager->GetKeyDownOnce(VK_DOWN))
+	//{
+	//	m_nKeyValue--;
+	//}
+//	m_pWoman->Update();
 	//PrevUpKey = m_bUpKey;
 
 	/*m_bDownKey = g_pInputManager->GetKeyDown(VK_DOWN);
@@ -219,15 +234,15 @@ void cMainGame::Update()
 	}
 	PrevDownKey = m_bDownKey;*/
 
-	g_pTimeManager->Update();
+	//g_pTimeManager->Update();
 		
-	m_pCubeMan->Update(m_pMap);
+	//m_pCubeMan->Update(m_pMap);
 	m_pCamera->Update();
 
 	
 	if (m_pAseRoot)
 	{		
-		//int nkey = (GetTickCount()  % (3200 - 640)) + 640;		
+		//=================int nkey = (GetTickCount()  % (3200 - 640)) + 640;		
 		static int cnt = m_pAseRoot->m_nSceneFirstframe;
 		m_nCurt = GetTickCount();
 		if (m_nCurt > m_nOld + m_pAseRoot->m_nSceneFramespeed)
@@ -259,12 +274,17 @@ void cMainGame::Render()
 		1.0f, 0);
 	g_pD3DDevice->BeginScene();
 
-	// 그림을 그린다.
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
-	m_pGrid->Render();
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
-	m_pAseRoot->Render();
 
+	
+
+	// 그림을 그린다.
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	m_pGrid->Render();
+	//g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	m_pAseRoot->Render();
+	m_pHeightMap->Render();
+	
+//	m_pWoman->Render();
 	/*D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
@@ -322,13 +342,13 @@ void cMainGame::Render()
 // 	}
 // 	
 // 
- 	RECT rc;
- 	SetRect(&rc, 100, 100, 101, 101);
- 	char szTemp[1024];
-// 	sprintf(szTemp, "%d / %d", dwGroup , dwMesh);
-	sprintf(szTemp, "%d", m_nKeyValue);
- 	m_pFont->DrawTextA(NULL, szTemp, strlen(szTemp),
- 		&rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255,0,0));
+// 	RECT rc;
+// 	SetRect(&rc, 100, 100, 101, 101);
+// 	char szTemp[1024];
+//// 	//sprintf(szTemp, "%d / %d", dwGroup , dwMesh);
+//	sprintf(szTemp, "%d", m_nKeyValue);
+// 	m_pFont->DrawTextA(NULL, szTemp, strlen(szTemp),
+// 		&rc, DT_LEFT | DT_TOP | DT_NOCLIP, D3DCOLOR_XRGB(255,0,0));
 
 
 	g_pD3DDevice->EndScene();

@@ -147,3 +147,10 @@ struct ST_ROT_SAMPLE
 	int nKey;
 	D3DXQUATERNION q;
 };
+
+struct ST_INDEX
+{
+	int i1;
+	int i2;
+	int i3;
+};

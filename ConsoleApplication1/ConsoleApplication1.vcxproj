@@ -11,23 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F95FBCA4-3173-4645-A0BF-FC93552413D5}</ProjectGuid>
+    <ProjectGuid>{3322B142-99D3-45AA-AFCC-50704E5641DB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Dx3D</RootNamespace>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -41,8 +41,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -52,10 +50,11 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -66,96 +65,29 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Dx3D.ico" />
-    <None Include="ReadMe.txt" />
-    <None Include="small.ico" />
+    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Asciitok.h" />
-    <ClInclude Include="cActionMove.h" />
-    <ClInclude Include="cActionRepeat.h" />
-    <ClInclude Include="cActionSeq.h" />
-    <ClInclude Include="cAseLoader.h" />
-    <ClInclude Include="cCamera.h" />
-    <ClInclude Include="cCircleRHW.h" />
-    <ClInclude Include="cCube.h" />
-    <ClInclude Include="cCubeMan.h" />
-    <ClInclude Include="cDeviceManager.h" />
-    <ClInclude Include="cFrame.h" />
-    <ClInclude Include="cGameObject.h" />
-    <ClInclude Include="cGrid.h" />
-    <ClInclude Include="cGroup.h" />
-    <ClInclude Include="cHeightMap.h" />
-    <ClInclude Include="cIndexCube.h" />
-    <ClInclude Include="cInputManiger.h" />
-    <ClInclude Include="cMainGame.h" />
-    <ClInclude Include="cMtlTex.h" />
-    <ClInclude Include="cObject.h" />
-    <ClInclude Include="cObjectManager.h" />
-    <ClInclude Include="cObjLoader.h" />
-    <ClInclude Include="cTeapot.h" />
-    <ClInclude Include="cTextureManager.h" />
-    <ClInclude Include="cTimeManager.h" />
-    <ClInclude Include="cTransform.h" />
-    <ClInclude Include="cWayPoint.h" />
-    <ClInclude Include="cWoman.h" />
-    <ClInclude Include="Dx3D.h" />
-    <ClInclude Include="cAction.h" />
-    <ClInclude Include="iActionDelegate.h" />
-    <ClInclude Include="iMap.h" />
-    <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cActionMove.cpp" />
-    <ClCompile Include="cActionRepeat.cpp" />
-    <ClCompile Include="cActionSeq.cpp" />
-    <ClCompile Include="cAseLoader.cpp" />
-    <ClCompile Include="cCamera.cpp" />
-    <ClCompile Include="cCircleRHW.cpp" />
-    <ClCompile Include="cCube.cpp" />
-    <ClCompile Include="cCubeMan.cpp" />
-    <ClCompile Include="cDeviceManager.cpp" />
-    <ClCompile Include="cFrame.cpp" />
-    <ClCompile Include="cGameObject.cpp" />
-    <ClCompile Include="cGrid.cpp" />
-    <ClCompile Include="cGroup.cpp" />
-    <ClCompile Include="cHeightMap.cpp" />
-    <ClCompile Include="cIndexCube.cpp" />
-    <ClCompile Include="cInputManiger.cpp" />
-    <ClCompile Include="cMainGame.cpp" />
-    <ClCompile Include="cMtlTex.cpp" />
-    <ClCompile Include="cObject.cpp" />
-    <ClCompile Include="cObjectManager.cpp" />
-    <ClCompile Include="cObjLoader.cpp" />
-    <ClCompile Include="cTeapot.cpp" />
-    <ClCompile Include="cTextureManager.cpp" />
-    <ClCompile Include="cTimeManager.cpp" />
-    <ClCompile Include="cTransform.cpp" />
-    <ClCompile Include="cWayPoint.cpp" />
-    <ClCompile Include="cWoman.cpp" />
-    <ClCompile Include="Dx3D.cpp" />
-    <ClCompile Include="cAction.cpp" />
-    <ClCompile Include="iActionDelegate.cpp" />
-    <ClCompile Include="iMap.cpp" />
+    <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Dx3D.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
