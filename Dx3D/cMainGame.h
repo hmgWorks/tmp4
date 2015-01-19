@@ -11,7 +11,7 @@ class cMtlTex;
 class cFrame;
 class cTeapot;
 class cWayPoint;
-class cWoman;
+//class cWoman;
 class cHeightMap;
 
 class cMainGame : public cObject, iActionDelegate

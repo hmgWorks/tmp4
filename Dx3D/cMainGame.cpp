@@ -156,8 +156,8 @@ void cMainGame::Setup()
 	m_pCubeMan = new cCubeMan;
 	m_pCubeMan->Setup();
 
-	/*m_pWoman = new cWoman;
-	m_pWoman->Setup();*/
+	//m_pWoman = new cWoman;
+	//m_pWoman->Setup();
 	m_pHeightMap = new cHeightMap;
 	std::string file = std::string(RESOURCE_FOLDER);
 	file += std::string("HeightMapData/HeightMap.raw");
@@ -224,7 +224,7 @@ void cMainGame::Update()
 	//{
 	//	m_nKeyValue--;
 	//}
-//	m_pWoman->Update();
+	//m_pWoman->Update();
 	//PrevUpKey = m_bUpKey;
 
 	/*m_bDownKey = g_pInputManager->GetKeyDown(VK_DOWN);
@@ -255,12 +255,10 @@ void cMainGame::Update()
 			}
 		}
 		m_pAseRoot->Update(NULL, cnt);
-	}
-	
+	}	
 
 	if(m_pTeapot)
 		m_pTeapot->Update();
-
 }
 
 void cMainGame::Render()
@@ -284,7 +282,7 @@ void cMainGame::Render()
 	m_pAseRoot->Render();
 	m_pHeightMap->Render();
 	
-//	m_pWoman->Render();
+	//m_pWoman->Render();
 	/*D3DXMATRIXA16 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);

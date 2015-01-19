@@ -3,7 +3,7 @@
 #include <fstream>
 
 cHeightMap::cHeightMap()
-	:m_pVB(NULL)// m_pMesh(NULL)
+	:m_pVB(NULL)
 	, m_pIB(NULL)
 	, m_pTexture(NULL)
 {
@@ -11,7 +11,6 @@ cHeightMap::cHeightMap()
 
 cHeightMap::~cHeightMap()
 {
-	//SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pTexture);
 	SAFE_RELEASE(m_pVB);
 	SAFE_RELEASE(m_pIB);
@@ -20,7 +19,6 @@ cHeightMap::~cHeightMap()
 void cHeightMap::Load(std::string file)
 {
 	D3DXCreateTextureFromFile(g_pD3DDevice, "../../Resources/HeightMapData/terrain.jpg",&m_pTexture);
-	//D3DXCreateTextureFromFile(g_pD3DDevice, "terrain.jpg", &m_pTexture);
 	
 	ST_PNT_VERTEX v;	
 	FILE* pFile;
@@ -106,11 +104,11 @@ void cHeightMap::Render()
 {	
 	D3DXMATRIXA16 mat;
 	D3DXMatrixTranslation(&mat, -257.0f / 2.0f, 0, -257.0f / 2.0f);
-	g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &mat);
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	g_pD3DDevice->SetTexture(0, m_pTexture/*NULL*/);
-	//g_pD3DDevice->SetTexture(0, /*m_pTexture*/NULL);
+	//g_pD3DDevice->SetTexture(0, m_pTexture/*NULL*/);
+	g_pD3DDevice->SetTexture(0, /*m_pTexture*/NULL);
 	g_pD3DDevice->SetStreamSource(0, m_pVB, 0, sizeof(ST_PNT_VERTEX));
 	g_pD3DDevice->SetIndices(m_pIB);
 	g_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vecVertex.size(), 0, m_vecIndex.size());
