@@ -30,7 +30,7 @@ void cHeightMap::Load(std::string file)
 			for (int x = 0; x < HEIGHT_SIZE; x++)
 			{	
 				ch = fgetc(pFile);
-				v.p = D3DXVECTOR3(x, (float)ch / 3.0f, z);
+				v.p = D3DXVECTOR3(x, (float)ch *0.2f, z);
 				v.t = D3DXVECTOR2((float)x / HEIGHT_SIZE, (float)z / HEIGHT_SIZE);
 				m_vecVertex.push_back(v);
 			}
@@ -102,13 +102,20 @@ void cHeightMap::Load(std::string file)
 
 void cHeightMap::Render()
 {	
+	D3DMATERIAL9 stMtl;
+	ZeroMemory(&stMtl, sizeof(D3DMATERIAL9));
+	stMtl.Ambient = D3DXCOLOR(1.0f,1.0f, 1.0f, 1.0f);
+	stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	g_pD3DDevice->SetMaterial(&stMtl);
 	D3DXMATRIXA16 mat;
 	D3DXMatrixTranslation(&mat, -257.0f / 2.0f, 0, -257.0f / 2.0f);
 	//g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &mat);
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	//g_pD3DDevice->SetTexture(0, m_pTexture/*NULL*/);
-	g_pD3DDevice->SetTexture(0, /*m_pTexture*/NULL);
+	g_pD3DDevice->SetTexture(0, m_pTexture/*NULL*/);
+	//g_pD3DDevice->SetTexture(0, /*m_pTexture*/NULL);
+	g_pD3DDevice->SetMaterial(&stMtl);
 	g_pD3DDevice->SetStreamSource(0, m_pVB, 0, sizeof(ST_PNT_VERTEX));
 	g_pD3DDevice->SetIndices(m_pIB);
 	g_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vecVertex.size(), 0, m_vecIndex.size());
