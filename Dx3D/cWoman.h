@@ -21,6 +21,7 @@ public:
 	cWoman();
 	~cWoman();
 	D3DXVECTOR3& GetPosition(){ return m_vPosition; }
+	void SetPosY(float y){ m_vPosition.y = y; }
 	void Setup();
 	void Update();
 	void Render();

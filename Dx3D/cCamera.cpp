@@ -46,11 +46,28 @@ void cCamera::Update()
 	{
 		m_vEye += (*m_pvTarget);
 		m_vLookAt = (*m_pvTarget);
+		
 	}
+	static float fVal = 4.0f;
+	if (g_pInputManager->GetKeyDownOnce(VK_UP))
+	{
+		fVal += 0.1f;
+	}
+	if (g_pInputManager->GetKeyDownOnce(VK_DOWN))
+	{
+		fVal -= 0.1f;
+	}
+
+	D3DVIEWPORT9 vp;
+	g_pD3DDevice->GetViewport(&vp);
 
 	D3DXMATRIXA16 matView;
 	D3DXMatrixLookAtLH(&matView, &m_vEye, &m_vLookAt, &m_vUp);
 	g_pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
+
+	D3DXMATRIXA16 matProj;
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / fVal, vp.Width / (float)vp.Height, 1.0f, 10000.0f);
+	g_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 }
 
 void cCamera::WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )

@@ -118,6 +118,7 @@ void cMainGame::Update()
 	if (m_pWoman)
 	{
 		m_pWoman->Update();
+		m_pHeightMap->SetPosition(m_pWoman);
 	}
 	
 	m_pCamera->Update();
@@ -140,13 +141,13 @@ void cMainGame::Render()
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
-	if (m_pHeightMap)
-	{
-		m_pHeightMap->Render();
-	}
 	if (m_pWoman)
 	{
 		m_pWoman->Render();
+	}
+	if (m_pHeightMap)
+	{
+		m_pHeightMap->Render();
 	}
 // 	RECT rc;
 // 	SetRect(&rc, 100, 100, 101, 101);

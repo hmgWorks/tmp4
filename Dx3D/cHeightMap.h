@@ -1,5 +1,7 @@
 #pragma once
 #define HEIGHT_SIZE 257
+
+class cWoman;
 class cHeightMap
 {
 private:
@@ -11,6 +13,7 @@ private:
 	LPDIRECT3DVERTEXBUFFER9	m_pVB;
 	LPDIRECT3DINDEXBUFFER9	m_pIB;
 	LPDIRECT3DTEXTURE9		m_pTexture;
+	D3DMATERIAL9			m_stMtl;
 public:
 	cHeightMap();
 	~cHeightMap();
@@ -18,5 +21,6 @@ public:
 	//raw파일을 읽어서 버택스를 만든다.
 	void Load(std::string file);
 	void Render();
+	void SetPosition(cWoman* woman);
 };
 

@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "cHeightMap.h"
 #include <fstream>
+#include "cWoman.h"
 
 cHeightMap::cHeightMap()
 	:m_pVB(NULL)
 	, m_pIB(NULL)
 	, m_pTexture(NULL)
+	
 {
 }
 
@@ -98,27 +100,68 @@ void cHeightMap::Load(std::string file)
 		memcpy(ip, &m_vecIndex[0], m_vecIndex.size()*sizeof(ST_INDEX));
 	}
 	m_pIB->Unlock();
+
+	ZeroMemory(&m_stMtl, sizeof(D3DMATERIAL9));
+	m_stMtl.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	m_stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 }
 
 void cHeightMap::Render()
 {	
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	D3DMATERIAL9 stMtl;
-	ZeroMemory(&stMtl, sizeof(D3DMATERIAL9));
-	stMtl.Ambient = D3DXCOLOR(1.0f,1.0f, 1.0f, 1.0f);
-	stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-
-	g_pD3DDevice->SetMaterial(&stMtl);
-	D3DXMATRIXA16 mat;
-	//D3DXMatrixTranslation(&mat, -257.0f / 2.0f, 0, -257.0f / 2.0f);
 	//g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	g_pD3DDevice->SetMaterial(&m_stMtl);
+	D3DXMATRIXA16 mat;
 	D3DXMatrixIdentity(&mat);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &mat);
 	g_pD3DDevice->SetTexture(0, m_pTexture/*NULL*/);
 	//g_pD3DDevice->SetTexture(0, /*m_pTexture*/NULL);
-	g_pD3DDevice->SetMaterial(&stMtl);
 	g_pD3DDevice->SetStreamSource(0, m_pVB, 0, sizeof(ST_PNT_VERTEX));
 	g_pD3DDevice->SetIndices(m_pIB);
 	g_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, m_vecVertex.size(), 0, m_vecIndex.size());
+}
+
+void cHeightMap::SetPosition(cWoman* woman)
+{
+	float iX, fX, iZ, fZ;
+	float x = woman->GetPosition().x;	
+	float z = woman->GetPosition().z;
+	fX = modf(x, &iX);
+	fZ = modf(z, &iZ);
+	D3DXVECTOR3 vY;
+	
+	if (iX > 0.0f && iZ > 0.0f && iX < HEIGHT_SIZE-1 && iZ < HEIGHT_SIZE-1)
+	{
+		if (fX + fZ <= 1.0f)
+		{
+			D3DXVECTOR3 vHor = m_vecVertex[(iZ + 0) * HEIGHT_SIZE + (iX + 1)].p - m_vecVertex[iZ * HEIGHT_SIZE + iX].p;
+			D3DXVECTOR3 vVer = m_vecVertex[(iZ + 1) * HEIGHT_SIZE + (iX + 0)].p - m_vecVertex[iZ * HEIGHT_SIZE + iX].p;
+
+			float len = D3DXVec3Length(&vHor);
+			vHor *= (fX / len);
+			len = D3DXVec3Length(&vVer);
+			vVer *= (fZ / len);
+
+			vY = vHor + vVer;
+			vY += m_vecVertex[iZ * HEIGHT_SIZE + iX].p;
+			woman->SetPosY(vY.y);
+		}
+		else
+		{
+			D3DXVECTOR3 vHor = m_vecVertex[(iZ + 1) * HEIGHT_SIZE + (iX + 0)].p - m_vecVertex[(iZ + 1) * HEIGHT_SIZE + (iX + 1)].p;
+			D3DXVECTOR3 vVer = m_vecVertex[(iZ + 0) * HEIGHT_SIZE + (iX + 1)].p - m_vecVertex[(iZ + 1) * HEIGHT_SIZE + (iX + 1)].p;
+			float len = D3DXVec3Length(&vHor);
+			vHor *= (fX / len);
+			len = D3DXVec3Length(&vVer);
+			vVer *= (fZ / len);
+
+			vY = vHor + vVer;
+			vY += m_vecVertex[(iZ + 1) * HEIGHT_SIZE + (iX + 1)].p;
+			woman->SetPosY(vY.y);
+		}
+			
+	}
+
+
 }
