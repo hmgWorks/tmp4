@@ -28,8 +28,7 @@ void cFrame::CalcLocalTM( D3DXMATRIXA16* pParent )
 {
 	D3DXMATRIXA16 matInvParent;
 	D3DXMatrixInverse(&matInvParent, 0, pParent);
-	m_matLocalTM = m_matWorldTM * matInvParent;
-
+	m_matLocalTM = m_matWorldTM * matInvParent;	
 }
 
 void cFrame::BuidlMesh( std::vector<ST_PNT_VERTEX>& vecVertex )

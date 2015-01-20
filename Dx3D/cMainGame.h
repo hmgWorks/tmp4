@@ -11,7 +11,7 @@ class cMtlTex;
 class cFrame;
 class cTeapot;
 class cWayPoint;
-//class cWoman;
+class cWoman;
 class cHeightMap;
 
 class cMainGame : public cObject, iActionDelegate
@@ -33,7 +33,7 @@ private:
 	BOOL m_bUpKey, m_bDownKey;
 	int m_nKeyValue;
 	int m_nOld, m_nCurt;
-	//cWoman*		m_pWoman;
+	cWoman*		m_pWoman;
 	cHeightMap*	m_pHeightMap;
 
 public:

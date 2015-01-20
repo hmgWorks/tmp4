@@ -16,20 +16,16 @@
 #include "cWayPoint.h"
 #include "cActionSeq.h"
 #include "cActionRepeat.h"
-//#include "cWoman.h"
+#include "cWoman.h"
 #include "cHeightMap.h"
 
 cMainGame::cMainGame(void)
-	: m_pGrid(NULL)
-	, m_pCamera(NULL)
-	, m_pCubeMan(NULL)
-	, m_pFont(NULL)
+	: m_pAseRoot(NULL)
 	, m_pMap(NULL)
-	, m_pIndexCube(NULL)
-	, m_pMesh(NULL)
-	, m_pAseRoot(NULL)
-	, m_pTeapot(NULL)
-	//, m_pWoman(NULL)
+	, m_pFont(NULL)
+	, m_pCamera(NULL)
+	, m_pGrid(NULL)
+	, m_pWoman(NULL)
 	, m_pHeightMap(NULL)
 {
 	m_bUpKey = FALSE;	
@@ -41,32 +37,15 @@ cMainGame::cMainGame(void)
 cMainGame::~cMainGame(void)
 {
 	SAFE_DELETE(m_pHeightMap);
-	//SAFE_DELETE(m_pWoman);
+	SAFE_DELETE(m_pWoman);
 	SAFE_DELETE(m_pGrid);
 	SAFE_DELETE(m_pCamera);
-	SAFE_DELETE(m_pCubeMan);
 	SAFE_RELEASE(m_pFont);
 	SAFE_DELETE(m_pMap);
-	SAFE_DELETE(m_pIndexCube);
-	SAFE_RELEASE(m_pMesh);
-	SAFE_RELEASE(m_pTeapot);
-	if(m_pAseRoot)
-		m_pAseRoot->Destroy();
+	/*if(m_pAseRoot)
+		m_pAseRoot->Destroy();*/
 
-	for each(auto p in m_vecGroup)
-	{
-		SAFE_DELETE(p);
-	}
-	
-	for each(auto p in m_vecMtlTex)
-	{
-		SAFE_RELEASE(p);
-	}
 
-	for each(auto p in m_vecWayPoint)
-	{
-		SAFE_RELEASE(p);
-	}
 
 	g_pTextureManager->Destroy();
 	cDeviceManager* pDevice = cDeviceManager::GetInstance();
@@ -75,89 +54,19 @@ cMainGame::~cMainGame(void)
 
 void cMainGame::Setup()
 {
-	m_nOld = GetTickCount();
-	// Axis-Angle x, y, z, w
-	//Axis-Angle -> Quaternion
-	//qx = x * sin(w/2)
-	//qy = y * sin(w/2)
-	//qz = z * sin(w/2)
-	//qw = cos(w/2)
-	//D3DXQUATERNION
-	//D3DXMatrixRotationQuaternion(아웃풋 매트릭스, 쿼터니언)
-	//D3DXQuaternionSlerp(아웃풋, 쿼1, 쿼2, t);
-
-	for (int i = 0; i < 6; ++i)
-	{
-		cWayPoint* pWayPoint = new cWayPoint;
-		pWayPoint->Setup(2 * (D3DX_PI / 6) * i, 5);
-		m_vecWayPoint.push_back(pWayPoint);
-	}
-	
-	m_pTeapot = new cTeapot;
-	m_pTeapot->Setup(D3DXCOLOR(0.8f, 0.2f, 0.4f, 1.0f));
-	
-	cActionSeq* pActionSeq = new cActionSeq;
-	for (int i = 0; i < 6; ++i)
-	{
-		cActionMove* pActionMove = new cActionMove;
-		pActionMove->SetFrom(m_vecWayPoint[i]->GetTransform()->GetPosition());
-		pActionMove->SetTo(m_vecWayPoint[(i + 1) % 6]->GetTransform()->GetPosition());
-		pActionMove->SetActionTime(1.0f);
-		pActionMove->SetOwner(m_pTeapot);
-		//pActionMove->SetDelegate(this);
-		pActionSeq->AddAction(pActionMove);
-		SAFE_RELEASE(pActionMove);
-	}
-	cActionRepeat* pActionRepeat = new cActionRepeat;
-	pActionRepeat->SetAction(pActionSeq);
-
-	m_pTeapot->SetAction(pActionRepeat);
-	pActionRepeat->Start();
-	//pActionRepeat->SetDelegate(this);
-	SAFE_RELEASE(pActionRepeat);
-	SAFE_RELEASE(pActionSeq);
-
-	m_pIndexCube = new cIndexCube;
-	m_pIndexCube->Setup();
-
 	std::string sFolder(RESOURCE_FOLDER);
 	sFolder += std::string("ase/woman/");
 
-	cAseLoader AseLoader;
+	//cAseLoader AseLoader;
 	//m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all_stand.ASE"));
-	m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all.ASE"));
-	//D3DXCreateSphere(g_pD3DDevice, 3, 100, 100, &m_pMesh, NULL);
-	//D3DXCreateBox(g_pD3DDevice, 3, 3, 3, &m_pMesh, NULL);
-	//D3DXCreateTeapot(g_pD3DDevice, &m_pMesh, NULL);
-
-	//D3DXIntersectTri(점1, 점2, 점3, 광선의 시작점, 광선의 방향, u, v, 광선의 시작점으로부터 방향으로의 거리비);
-	cObjLoader ObjLoader;
-	sFolder = std::string(RESOURCE_FOLDER);
-	sFolder += std::string("obj/");
-
-
-	D3DXMATRIXA16 matWorld;
-	D3DXMATRIXA16 matS, matR;
-	D3DXMatrixScaling(&matS, 0.1f, 0.1f, 0.1f);
-	D3DXMatrixRotationX(&matR, -D3DX_PI / 2.f);
-	matWorld = matS * matR;
-
-	ObjLoader.Load(m_vecGroup, sFolder, std::string("Map.obj"));
-	
-	m_pMesh = ObjLoader.LoadMesh(m_vecMtlTex, sFolder, std::string("Map.obj"));
-
-	cObjMap* pMap = new cObjMap;
-	pMap->Load(sFolder, std::string("map_surface.obj"), &matWorld);
-	m_pMap = pMap;
+	//m_pAseRoot = AseLoader.Load(sFolder, std::string("woman_01_all.ASE"));
 
 	m_pGrid = new cGrid;
 	m_pGrid->Setup(30, 1.0f);
 
-	m_pCubeMan = new cCubeMan;
-	m_pCubeMan->Setup();
+	m_pWoman = new cWoman;
+	m_pWoman->Setup();
 
-	//m_pWoman = new cWoman;
-	//m_pWoman->Setup();
 	m_pHeightMap = new cHeightMap;
 	std::string file = std::string(RESOURCE_FOLDER);
 	file += std::string("HeightMapData/HeightMap.raw");
@@ -166,7 +75,8 @@ void cMainGame::Setup()
 
 	m_pCamera = new cCamera;
 	m_pCamera->Setup();
-	m_pCamera->SetTarget(&m_pCubeMan->GetPosition());
+	//m_pCamera->SetTarget(&m_pCubeMan->GetPosition());
+	m_pCamera->SetTarget(&m_pWoman->GetPosition());
 
 	//폰트 생성
 	D3DXFONT_DESC fd;
@@ -185,9 +95,7 @@ void cMainGame::Setup()
 
 	HRESULT hr = D3DXCreateFontIndirect(g_pD3DDevice, &fd, &m_pFont);
 	assert(S_OK == hr);
-
 	
-
 	D3DLIGHT9 stLight;
 	ZeroMemory(&stLight, sizeof(D3DLIGHT9));
 	stLight.Type = D3DLIGHT_DIRECTIONAL;
@@ -207,58 +115,12 @@ void cMainGame::Setup()
 
 void cMainGame::Update()
 {
-	/*
-	this->GetAniFrameInf(&m_nFrmF, &m_nFrmL, &m_nFrmS, &m_nFrmT);
-	m_dBgn = timeGetTime();
-	*/
-	/*static BOOL PrevUpKey = FALSE;
-	static BOOL PrevDownKey = FALSE;
-	
-	m_bUpKey = g_pInputManager->GetKeyDown(VK_UP);*/
-	//if (!PrevUpKey && m_bUpKey)
-	//if (g_pInputManager->GetKeyDownOnce(VK_UP))
-	//{
-	//	m_nKeyValue++;
-	//}
-	//if (g_pInputManager->GetKeyDownOnce(VK_DOWN))
-	//{
-	//	m_nKeyValue--;
-	//}
-	//m_pWoman->Update();
-	//PrevUpKey = m_bUpKey;
-
-	/*m_bDownKey = g_pInputManager->GetKeyDown(VK_DOWN);
-	if (!PrevDownKey && m_bDownKey)
+	if (m_pWoman)
 	{
-		m_nKeyValue--;
+		m_pWoman->Update();
 	}
-	PrevDownKey = m_bDownKey;*/
-
-	//g_pTimeManager->Update();
-		
-	//m_pCubeMan->Update(m_pMap);
-	m_pCamera->Update();
-
 	
-	if (m_pAseRoot)
-	{		
-		//=================int nkey = (GetTickCount()  % (3200 - 640)) + 640;		
-		static int cnt = m_pAseRoot->m_nSceneFirstframe;
-		m_nCurt = GetTickCount();
-		if (m_nCurt > m_nOld + m_pAseRoot->m_nSceneFramespeed)
-		{
-			cnt++;
-			m_nOld = m_nCurt;
-			if (cnt > m_pAseRoot->m_nSceneLastframe)
-			{
-				cnt = m_pAseRoot->m_nSceneFirstframe;
-			}
-		}
-		m_pAseRoot->Update(NULL, cnt);
-	}	
-
-	if(m_pTeapot)
-		m_pTeapot->Update();
+	m_pCamera->Update();
 }
 
 void cMainGame::Render()
@@ -272,74 +134,20 @@ void cMainGame::Render()
 		1.0f, 0);
 	g_pD3DDevice->BeginScene();
 
-
-	
-
 	// 그림을 그린다.
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pGrid->Render();
-	//g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	m_pAseRoot->Render();
-	m_pHeightMap->Render();
-	
-	//m_pWoman->Render();
-	/*D3DXMATRIXA16 matWorld;
-	D3DXMatrixIdentity(&matWorld);
-	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
-	for each(auto p in m_vecWayPoint)
+
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+	if (m_pHeightMap)
 	{
-		p->Render();
-	}*/
-
-	//m_pTeapot->Render();
-// 
-// 	D3DXMATRIXA16 matWorld;
-// 	D3DXMatrixIdentity(&matWorld);
-// 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
-// 	//g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-// 	m_pMesh->DrawSubset(0);
-// 
-// 	m_pIndexCube->Render();
-// 
-// 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
-
-
-// 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
-// 
-// 	D3DMATERIAL9 stMtl;
-// 	ZeroMemory(&stMtl, sizeof(D3DMATERIAL9));
-// 	stMtl.Ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-// 	stMtl.Diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-// 	stMtl.Specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-// 	g_pD3DDevice->SetMaterial(&stMtl);
-// 
-// 	m_pCubeMan->Render();
-// 
-// 	D3DXMATRIXA16 matWorld;
-// 	D3DXMATRIXA16 matS, matR;
-// 	D3DXMatrixScaling(&matS, 0.1f, 0.1f, 0.1f);
-// 	D3DXMatrixRotationX(&matR, -D3DX_PI / 2.f);
-// 	matWorld = matS * matR;
-// 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
-// 
-// 	g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-// 
-// 	if(GetKeyState(VK_SPACE) & 0x8000)
-// 	{
-// 		for each(auto p in m_vecSurface)
-// 		{
-// 			p->Render();
-// 		}
-// 	}
-// 	else
-// 	{
-// 		for each(auto p in m_vecGroup)
-// 		{
-// 			p->Render();
-// 		}
-// 	}
-// 	
-// 
+		m_pHeightMap->Render();
+	}
+	if (m_pWoman)
+	{
+		m_pWoman->Render();
+	}
 // 	RECT rc;
 // 	SetRect(&rc, 100, 100, 101, 101);
 // 	char szTemp[1024];

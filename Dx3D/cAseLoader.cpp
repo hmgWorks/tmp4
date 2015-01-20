@@ -45,6 +45,9 @@ cFrame* cAseLoader::Load( std::string& sFolder, std::string& sFileName )
 			}
 			else
 			{
+				D3DXMATRIXA16 mat;
+				D3DXMatrixIdentity(&mat);
+				pFrame->CalcLocalTM(&mat);
 				m_pRootFrame = pFrame;
 			}
 		}
